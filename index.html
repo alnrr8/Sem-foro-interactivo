@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Semáforo Interactivo</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #0f1220;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+
+    .semaforo {
+      background: #222;
+      padding: 20px;
+      border-radius: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 15px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.4);
+    }
+
+    .luz {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: #333;
+      transition: background 0.3s;
+    }
+
+    .rojo.active {
+      background: red;
+      box-shadow: 0 0 20px red;
+    }
+
+    .amarillo.active {
+      background: yellow;
+      box-shadow: 0 0 20px yellow;
+    }
+
+    .verde.active {
+      background: limegreen;
+      box-shadow: 0 0 20px limegreen;
+    }
+
+    button {
+      margin-top: 20px;
+      padding: 10px 15px;
+      border: none;
+      background: #0b84ff;
+      color: #fff;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: bold;
+      box-shadow: 0 6px 16px rgba(11,132,255,0.2);
+    }
+
+    button:active {
+      transform: scale(0.98);
+    }
+  </style>
+</head>
+<body>
+  <div class="semaforo">
+    <div class="luz rojo active" id="rojo"></div>
+    <div class="luz amarillo" id="amarillo"></div>
+    <div class="luz verde" id="verde"></div>
+  </div>
+
+  <button id="boton">Cambiar color</button>
+
+  <script>
+    const luces = ["rojo", "amarillo", "verde"];
+    let indice = 0;
+    const boton = document.getElementById("boton");
+
+    function cambiarLuz() {
+      // Apagar todas las luces
+      luces.forEach(color => {
+        document.getElementById(color).classList.remove("active");
+      });
+
+      // Encender la luz actual
+      const colorActual = luces[indice];
+      document.getElementById(colorActual).classList.add("active");
+
+      // Avanzar al siguiente color
+      indice = (indice + 1) % luces.length;
+    }
+
+    // Cambiar con botón
+    boton.addEventListener("click", cambiarLuz);
+
+    // Cambiar automáticamente cada 2 segundos
+    setInterval(cambiarLuz, 2000);
+  </script>
+</body>
+</html>
