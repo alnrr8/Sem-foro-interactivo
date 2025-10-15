@@ -1,105 +1,140 @@
-<!DOCTYPE html>
-<html lang="es">
+<!DOCTYPE html><html lang="es">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Semáforo Interactivo</title>
+  <title>Semáforo Interactivo Realista con Modo Día/Noche</title>
   <style>
-    body {
-      font-family: sans-serif;
-      background: #0f1220;
-      color: #fff;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-    }
+    :root {
+      --fondo-dia: linear-gradient(to bottom, #87cefa, #fefefe);
+      --fondo-noche: linear-gradient(to bottom, #0d1117, #1e293b);
+      --poste: #444;
+      --luz-apagada: radial-gradient(circle at 30% 30%, #222, #000);
+    }body {
+  font-family: Arial, sans-serif;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  margin: 0;
+  transition: background 1s;
+  background: var(--fondo-noche);
+}
 
-    .semaforo {
-      background: #222;
-      padding: 20px;
-      border-radius: 20px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 15px;
-      box-shadow: 0 0 20px rgba(0,0,0,0.4);
-    }
+body.dia {
+  background: var(--fondo-dia);
+  color: #000;
+}
 
-    .luz {
-      width: 80px;
-      height: 80px;
-      border-radius: 50%;
-      background: #333;
-      transition: background 0.3s;
-    }
+.poste {
+  width: 20px;
+  height: 200px;
+  background: var(--poste);
+  margin-top: -10px;
+  border-radius: 5px;
+}
 
-    .rojo.active {
-      background: red;
-      box-shadow: 0 0 20px red;
-    }
+.caja {
+  background: #1a1a1a;
+  padding: 20px;
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+  box-shadow: inset 0 0 15px #000, 0 10px 30px rgba(0, 0, 0, 0.6);
+  border: 3px solid #333;
+  transition: background 1s, border 1s;
+}
 
-    .amarillo.active {
-      background: yellow;
-      box-shadow: 0 0 20px yellow;
-    }
+body.dia .caja {
+  background: #f0f0f0;
+  border: 3px solid #bbb;
+  box-shadow: inset 0 0 15px #ddd, 0 10px 20px rgba(0, 0, 0, 0.3);
+}
 
-    .verde.active {
-      background: limegreen;
-      box-shadow: 0 0 20px limegreen;
-    }
+.luz {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  background: var(--luz-apagada);
+  transition: background 0.4s, box-shadow 0.4s;
+}
 
-    button {
-      margin-top: 20px;
-      padding: 10px 15px;
-      border: none;
-      background: #0b84ff;
-      color: #fff;
-      border-radius: 10px;
-      cursor: pointer;
-      font-weight: bold;
-      box-shadow: 0 6px 16px rgba(11,132,255,0.2);
-    }
+.luz.roja.active {
+  background: radial-gradient(circle at 30% 30%, #ff6b6b, #b30000);
+  box-shadow: 0 0 30px 10px #ff4d4d;
+}
 
-    button:active {
-      transform: scale(0.98);
-    }
+.luz.amarilla.active {
+  background: radial-gradient(circle at 30% 30%, #fff176, #ffcc00);
+  box-shadow: 0 0 30px 10px #ffe066;
+}
+
+.luz.verde.active {
+  background: radial-gradient(circle at 30% 30%, #7CFC00, #006400);
+  box-shadow: 0 0 30px 10px #32cd32;
+}
+
+button {
+  margin-top: 25px;
+  padding: 10px 20px;
+  border: none;
+  background: #0b84ff;
+  color: #fff;
+  font-weight: bold;
+  border-radius: 10px;
+  cursor: pointer;
+  box-shadow: 0 6px 16px rgba(11,132,255,0.3);
+  transition: transform 0.1s, background 0.3s;
+}
+
+button:active {
+  transform: scale(0.97);
+}
+
+button.modo {
+  background: #22c55e;
+  margin-top: 10px;
+}
+
   </style>
 </head>
 <body>
-  <div class="semaforo">
-    <div class="luz rojo active" id="rojo"></div>
-    <div class="luz amarillo" id="amarillo"></div>
+  <div class="caja">
+    <div class="luz roja active" id="roja"></div>
+    <div class="luz amarilla" id="amarilla"></div>
     <div class="luz verde" id="verde"></div>
   </div>
-
-  <button id="boton">Cambiar color</button>
+  <div class="poste"></div><button id="boton">Cambiar color</button> <button id="modo" class="modo">Cambiar a modo día</button>
 
   <script>
-    const luces = ["rojo", "amarillo", "verde"];
+    const luces = ["roja", "amarilla", "verde"];
     let indice = 0;
     const boton = document.getElementById("boton");
+    const modoBtn = document.getElementById("modo");
 
     function cambiarLuz() {
-      // Apagar todas las luces
       luces.forEach(color => {
         document.getElementById(color).classList.remove("active");
       });
-
-      // Encender la luz actual
       const colorActual = luces[indice];
       document.getElementById(colorActual).classList.add("active");
-
-      // Avanzar al siguiente color
       indice = (indice + 1) % luces.length;
     }
 
-    // Cambiar con botón
     boton.addEventListener("click", cambiarLuz);
-
-    // Cambiar automáticamente cada 2 segundos
     setInterval(cambiarLuz, 2000);
-  </script>
-</body>
+
+    // Alternar entre modo día y noche
+    modoBtn.addEventListener("click", () => {
+      document.body.classList.toggle("dia");
+      if (document.body.classList.contains("dia")) {
+        modoBtn.textContent = "Cambiar a modo noche";
+      } else {
+        modoBtn.textContent = "Cambiar a modo día";
+      }
+    });
+  </script></body>
 </html>
