@@ -22,7 +22,7 @@ Interacciones:
 - **Automático**: las luces cambian automáticamente cada **2 segundos**.
 
 ## 🧩 Estructura de archivos
-[========]
+
 ## 🚀 Cómo ejecutar
 1. Clona o descarga el repositorio.
 2. Abre `index.html` en cualquier navegador moderno.
@@ -37,6 +37,6 @@ Interacciones:
 
 ---
 
-**Autor:** Alan Ramírez  
+**Autor:** Alan Ramírez  Ramírez 
 **Fecha:** Octubre 2025  
 **Actividad:** Semáforo Interactivo Realista — Programación Web
